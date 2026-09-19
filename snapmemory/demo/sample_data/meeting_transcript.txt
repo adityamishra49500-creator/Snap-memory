@@ -1,0 +1,10 @@
+Good morning everyone, thanks for joining the project sync. Let's start with authentication.
+We decided to use Firebase authentication for the initial launch because we needed to move fast
+and the team didn't have bandwidth for a custom solution before the deadline. James will handle
+the backend indexing pipeline, and the deadline for that is November 28th. Priya will take the
+frontend dashboard work. Does anyone have concerns about the Firebase approach? Sarah asked
+whether we've reviewed the pricing at scale, and we agreed to revisit this decision after 90 days
+in production. Sarah will own that 90-day review. What is still open is whether we support
+single sign-on in this phase or defer it. We're leaning toward deferring SSO to next quarter.
+Let's also confirm the launch date. The launch is planned for December 12th, and marketing assets
+are due December 5th. Any other questions? Great, let's wrap up here. Thanks everyone.

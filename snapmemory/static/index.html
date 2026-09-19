@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapMemory — Your private AI memory</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Command Palette -->
+<div id="command-palette-overlay" class="cmdk-overlay hidden">
+  <div class="cmdk-box">
+    <input id="cmdk-input" type="text" placeholder="Type a command… (Ask, Import, Search, Privacy, Benchmark)" autocomplete="off">
+    <div id="cmdk-list" class="cmdk-list"></div>
+    <div class="cmdk-hint">↑↓ navigate · ↵ select · esc close</div>
+  </div>
+</div>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">◈</div>
+      <div class="brand-text">
+        <div class="brand-name">SnapMemory</div>
+        <div class="brand-tagline">Remember everything. Share nothing.</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+      <button class="nav-item" data-view="ask"><span class="nav-icon">✦</span>Ask SnapMemory</button>
+      <button class="nav-item" data-view="memories"><span class="nav-icon">◍</span>Memories</button>
+      <button class="nav-item" data-view="meetings"><span class="nav-icon">◔</span>Meetings</button>
+      <button class="nav-item" data-view="documents"><span class="nav-icon">▤</span>Documents</button>
+      <button class="nav-item" data-view="images"><span class="nav-icon">▧</span>Visual Memory</button>
+      <button class="nav-item" data-view="timeline"><span class="nav-icon">⟶</span>Timeline</button>
+      <button class="nav-item" data-view="privacy"><span class="nav-icon">◐</span>Privacy</button>
+      <button class="nav-item" data-view="performance"><span class="nav-icon">◑</span>Performance</button>
+      <button class="nav-item" data-view="settings"><span class="nav-icon">◎</span>Settings</button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-pill" id="status-pill">
+        <span class="dot dot-green"></span> Local · Offline-capable
+      </div>
+      <button class="cmdk-trigger" id="cmdk-trigger">⌘K Command</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search-bar">
+        <input id="global-search" type="text" placeholder="Search your memory…">
+      </div>
+      <button class="btn btn-ghost" id="demo-mode-btn">Load Demo Data</button>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-header">
+        <h1>Dashboard</h1>
+        <p class="subtitle">Your Snapdragon PC's private AI memory, at a glance.</p>
+      </div>
+      <div class="stat-grid" id="stat-grid"></div>
+      <div class="dash-columns">
+        <div class="panel">
+          <h3>Recent Memories</h3>
+          <div id="recent-memories" class="list"></div>
+        </div>
+        <div class="panel">
+          <h3>Recent Questions</h3>
+          <div id="recent-questions" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASK -->
+    <section class="view" id="view-ask">
+      <div class="view-header">
+        <h1>Ask SnapMemory</h1>
+        <p class="subtitle">Ask a question. Get a grounded answer with sources — generated entirely on-device.</p>
+      </div>
+      <div class="ask-box">
+        <input id="ask-input" type="text" placeholder='e.g. "What did we decide about authentication?"'>
+        <button class="btn btn-primary" id="ask-btn">Ask</button>
+      </div>
+      <div id="ask-result" class="ask-result hidden"></div>
+    </section>
+
+    <!-- MEMORIES -->
+    <section class="view" id="view-memories">
+      <div class="view-header">
+        <h1>Memory Explorer</h1>
+        <p class="subtitle">Every chunk SnapMemory has indexed, searchable and filterable.</p>
+      </div>
+      <div class="filter-row" id="memory-filters">
+        <button class="chip active" data-type="all">All</button>
+        <button class="chip" data-type="document">Documents</button>
+        <button class="chip" data-type="meeting">Meetings</button>
+        <button class="chip" data-type="image">Images</button>
+      </div>
+      <div id="memory-list" class="list"></div>
+    </section>
+
+    <!-- MEETINGS -->
+    <section class="view" id="view-meetings">
+      <div class="view-header">
+        <h1>Meetings</h1>
+        <p class="subtitle">Upload a recording to get a transcript, summary, decisions, and action items.</p>
+      </div>
+      <div class="dropzone" data-upload-type="meeting">
+        <input type="file" id="meeting-file-input" accept=".wav,.mp3,.m4a,.webm" hidden>
+        <div class="dropzone-inner">Drop an audio file here, or click to choose (.wav, .mp3, .m4a, .webm)</div>
+      </div>
+      <div id="meeting-list" class="card-grid"></div>
+      <div id="meeting-detail" class="detail-panel hidden"></div>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section class="view" id="view-documents">
+      <div class="view-header">
+        <h1>Documents</h1>
+        <p class="subtitle">PDF, PPTX, TXT, and Markdown are chunked, embedded, and indexed locally.</p>
+      </div>
+      <div class="dropzone" data-upload-type="document">
+        <input type="file" id="document-file-input" accept=".pdf,.pptx,.ppt,.txt,.md" hidden>
+        <div class="dropzone-inner">Drop a document here, or click to choose (.pdf, .pptx, .txt, .md)</div>
+      </div>
+      <div id="document-list" class="card-grid"></div>
+    </section>
+
+    <!-- IMAGES -->
+    <section class="view" id="view-images">
+      <div class="view-header">
+        <h1>Visual Memory</h1>
+        <p class="subtitle">Screenshots and images are OCR'd locally and added to memory.</p>
+      </div>
+      <div class="dropzone" data-upload-type="image">
+        <input type="file" id="image-file-input" accept=".png,.jpg,.jpeg,.webp" hidden>
+        <div class="dropzone-inner">Drop an image here, or click to choose (.png, .jpg, .webp)</div>
+      </div>
+      <div id="image-list" class="card-grid"></div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="view" id="view-timeline">
+      <div class="view-header">
+        <h1>Timeline</h1>
+        <p class="subtitle">When your memories were created or imported.</p>
+      </div>
+      <div id="timeline-list" class="timeline"></div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="view" id="view-privacy">
+      <div class="view-header">
+        <h1>Privacy Center</h1>
+        <p class="subtitle">Real application state — not marketing numbers.</p>
+      </div>
+      <div class="stat-grid" id="privacy-grid"></div>
+      <div class="panel">
+        <h3>Audit Log</h3>
+        <div id="audit-log" class="list mono"></div>
+      </div>
+      <div class="danger-zone panel">
+        <h3>Data Management</h3>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="export-btn">Export Memory (backup)</button>
+          <label class="btn btn-ghost" for="import-file-input">Import Memory (restore)</label>
+          <input type="file" id="import-file-input" accept=".zip" hidden>
+          <button class="btn btn-danger" id="delete-all-btn">Delete All Memories</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERFORMANCE -->
+    <section class="view" id="view-performance">
+      <div class="view-header">
+        <h1>Performance & Snapdragon Status</h1>
+        <p class="subtitle">Actual measured performance on this device. No invented numbers.</p>
+      </div>
+      <div class="panel">
+        <h3>Device & Model Status</h3>
+        <div id="model-status-list" class="list mono"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head-row">
+          <h3>Benchmark</h3>
+          <div>
+            <button class="btn btn-primary" id="run-benchmark-btn">Start Benchmark</button>
+            <button class="btn btn-ghost" id="export-benchmark-btn">Export JSON</button>
+          </div>
+        </div>
+        <div id="benchmark-results" class="list mono"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="view-settings">
+      <div class="view-header">
+        <h1>Settings</h1>
+        <p class="subtitle">SnapMemory configuration.</p>
+      </div>
+      <div class="panel">
+        <h3>About</h3>
+        <p>SnapMemory — your private AI memory. Entirely on-device.</p>
+        <p class="muted">Built for the Snapdragon AI Lab Build &amp; Present Challenge.</p>
+      </div>
+      <div class="panel">
+        <h3>Data Location</h3>
+        <div id="settings-db-path" class="mono"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

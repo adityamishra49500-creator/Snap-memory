@@ -1,0 +1,14 @@
+Product Roadmap Summary
+
+Q4 Focus Areas
+- Ship the local RAG search experience for internal documents.
+- Ship meeting transcription and action item extraction.
+- Ship the Privacy Center dashboard.
+
+Launch
+The launch is planned for December 12, pending successful completion of the internal pilot.
+Marketing assets are due one week before launch, on December 5.
+
+Ownership
+James is assigned the backend indexing pipeline. Priya is assigned the frontend dashboard.
+The deadline for the backend indexing pipeline is November 28.

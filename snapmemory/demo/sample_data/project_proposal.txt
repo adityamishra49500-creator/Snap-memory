@@ -1,0 +1,18 @@
+Project Proposal: SnapMemory Internal Rollout
+
+Overview
+This document proposes an internal pilot of SnapMemory across the product and engineering teams
+for Q4. The goal is to reduce time spent searching for meeting outcomes and reference documents.
+
+Objectives
+1. Reduce average time-to-find-a-decision from 12 minutes to under 2 minutes.
+2. Keep all indexed data fully local to each employee's device for privacy compliance.
+3. Support PDF, PPTX, meeting audio, and screenshots as input sources.
+
+Timeline
+The pilot begins November 3 and runs for six weeks, concluding December 12.
+
+Success Criteria
+The pilot will be considered successful if at least 70% of pilot users report finding
+answers to project questions faster than before, and if zero user data leaves the device
+during the pilot period.

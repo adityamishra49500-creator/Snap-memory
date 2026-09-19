@@ -1,0 +1,24 @@
+# Core (required — everything below this line is enough to run SnapMemory
+# in local-fallback / development mode with no downloads and no internet):
+Flask>=3.0
+numpy>=1.26
+scikit-learn>=1.3
+pdfplumber>=0.11
+pypdf>=5.0
+python-pptx>=1.0
+pillow>=10.0
+pytesseract>=0.3        # also requires the `tesseract` binary on PATH
+onnxruntime>=1.17        # used for Qualcomm/QNN execution-provider detection
+
+# Optional — enables real meeting transcription (CPU/GPU reference backend).
+# Not required to run the rest of the app.
+# faster-whisper>=1.0
+
+# Optional — Snapdragon / Qualcomm AI Hub acceleration.
+# See SNAPDRAGON_SETUP.md for how these plug into ai/providers.py,
+# ai/embeddings.py, ai/transcription.py, ai/vision.py, and ai/rag.py.
+# qai-hub
+# qai-hub-models
+
+# Optional — local LLM runtime for generative (vs. extractive) answers.
+# llama-cpp-python
